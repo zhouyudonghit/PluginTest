@@ -36,33 +36,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String name = "plugin.apk";
         File file = new File(filesDir,name);
         String filePath = file.getAbsolutePath();
-        if(file.exists())
-        {
-            file.delete();
-        }
+//        if(file.exists())
+//        {
+//            file.delete();
+//        }
         InputStream is = null;
         FileOutputStream os = null;
         try{
-            Log.i(TAG,"加载插件 "+new File(Environment.getExternalStorageDirectory(),name).getAbsolutePath());
-            is = new FileInputStream(new File(Environment.getExternalStorageDirectory(),name));
-            os = new FileOutputStream(filePath);
-            int len = 0;
-            byte[] buffer = new byte[1024];
-            while((len = is.read(buffer)) != -1)
-            {
-                os.write(buffer,0,len);
-            }
-            File f = new File(filePath);
-            if(f.exists())
-            {
-                Toast.makeText(this,"dex overwrite",Toast.LENGTH_LONG).show();
-            }
+//            Log.i(TAG,"加载插件 "+new File(Environment.getExternalStorageDirectory(),name).getAbsolutePath());
+//            String externalPath = "/storage/emulated/0";
+//            is = new FileInputStream(new File(externalPath,name));
+//            os = new FileOutputStream(filePath);
+//            int len = 0;
+//            byte[] buffer = new byte[1024];
+//            while((len = is.read(buffer)) != -1)
+//            {
+//                os.write(buffer,0,len);
+//            }
+//            File f = new File(filePath);
+//            if(f.exists())
+//            {
+//                Toast.makeText(this,"dex overwrite",Toast.LENGTH_LONG).show();
+//            }
             PluginManager.getInstance().loadPath(this);
-        } catch (FileNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }finally {
+        } finally {
             try{
                 if(os != null)
                 {
