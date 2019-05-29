@@ -1,9 +1,7 @@
-package com.example.yudongzhou.plugintest;
+package com.example.yudongzhou.plugintest.ChaZhuangPlugin;
 
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -12,18 +10,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.example.pluginstandard.activity.IPluginActivity;
+import com.example.pluginstandard.LogConfig;
+import com.example.yudongzhou.plugintest.PluginManager;
 
 import java.lang.reflect.Constructor;
 
 public class ProxyActivity extends AppCompatActivity {
-    private String TAG = getClass().getSimpleName();
+    private String TAG = LogConfig.TAG_PREFIX+getClass().getSimpleName();
     private String className;
     private IPluginActivity mTargetActivity;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG,"getWindow() = "+getWindow());
         className = getIntent().getStringExtra("className");
+        Log.d(TAG,"onCreate,className = "+className);
         try{
             Class activityClass = getClassLoader().loadClass(className);
             Log.d(TAG,getClassLoader().toString());
@@ -86,18 +88,33 @@ public class ProxyActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
+        Log.d(TAG,"onStart()");
         super.onStart();
         mTargetActivity.onStart();
     }
 
     @Override
+    protected void onResume() {
+        Log.d(TAG,"onResume");
+        super.onResume();
+    }
+
+    @Override
+    protected void onStop() {
+        Log.d(TAG,"onStop()");
+        super.onStop();
+    }
+
+    @Override
     protected void onDestroy() {
+        Log.d(TAG,"onDestroy");
         super.onDestroy();
         mTargetActivity.onDestroy();
     }
 
     @Override
     protected void onPause() {
+        Log.d(TAG,"onPause");
         super.onPause();
         mTargetActivity.onPause();
     }

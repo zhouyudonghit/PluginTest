@@ -28,6 +28,12 @@ android {
             signingConfig signingConfigs.config
         }
     }
+
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "plugin.apk"
+        }
+    }
 }
 
 dependencies {

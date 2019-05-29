@@ -1,29 +1,30 @@
-package com.example.plugintarget;
+package com.example.plugintarget.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.pluginstandard.LogConfig;
 import com.example.pluginstandard.activity.PluginActivity;
-
-import java.io.File;
+import com.example.plugintarget.R;
 
 public class MainActivity extends PluginActivity {
-    private String TAG = getClass().getSimpleName();
+    private String TAG = LogConfig.TAG_PREFIX+getClass().getSimpleName();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG,"onCreate");
+        Log.d(TAG,"getWindow() = "+getWindow());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         findViewById(R.id.textview).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(that, "Target toast show...", Toast.LENGTH_SHORT).show();
+                Log.d(TAG,"first activity btn clicked");
                 startActivity(new Intent(that, SecondActivity.class));
                 //startService(new Intent(that, TestService.class));
             }

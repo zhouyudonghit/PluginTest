@@ -2,19 +2,15 @@ package com.example.yudongzhou.plugintest;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.example.yudongzhou.plugintest.ChaZhuangPlugin.ProxyActivity;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -85,16 +81,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onStart();
     }
 
-    public void click(View view) {
-        Intent intent = new Intent(this, ProxyActivity.class);
-        intent.putExtra("className", PluginManager.getInstance().getPackageInfo().activities[0].name);
-        startActivity(intent);
-    }
-
     @Override
     public void onClick(View v) {
         Intent intent = new Intent(this, ProxyActivity.class);
-        intent.putExtra("className", PluginManager.getInstance().getPackageInfo().activities[0].name);
+        intent.putExtra("className", PluginManager.getInstance().getActivityPackageInfo().activities[0].name);
         startActivity(intent);
     }
 }

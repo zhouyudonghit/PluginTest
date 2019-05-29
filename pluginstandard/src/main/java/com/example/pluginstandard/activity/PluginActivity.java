@@ -10,12 +10,16 @@ import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.example.pluginstandard.LogConfig;
+
 public class PluginActivity extends AppCompatActivity implements IPluginActivity {
+    private String TAG = LogConfig.TAG_PREFIX+"PluginActivity";
     protected Activity that;
 
     @Override
@@ -96,6 +100,7 @@ public class PluginActivity extends AppCompatActivity implements IPluginActivity
 
     @Override
     public void startActivity(Intent intent) {
+        Log.d(TAG,"startActivity");
         if(that != null) {
             //ProxyActivity --->className
             Intent m = new Intent();
@@ -144,7 +149,7 @@ public class PluginActivity extends AppCompatActivity implements IPluginActivity
     @SuppressLint("MissingSuperCall")
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
+        Log.d(TAG,"onCreate");
     }
 
     @SuppressLint("MissingSuperCall")

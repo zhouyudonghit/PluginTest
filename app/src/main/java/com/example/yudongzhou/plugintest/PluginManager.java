@@ -8,15 +8,18 @@ import android.content.res.Resources;
 
 import java.io.File;
 import java.lang.reflect.Method;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import dalvik.system.DexClassLoader;
 
 public class PluginManager {
     private static volatile PluginManager singleInstance;
     private Resources resources;
-    private PackageInfo packageInfo;
+    private PackageInfo mActivityPackageInfo;
+    private PackageInfo mReceiverPackageInfo;
     private DexClassLoader dexClassLoader;
     private Context mContext;
+    private AtomicBoolean ifLoaded = new AtomicBoolean(false);
 
     public static PluginManager getInstance()
     {
@@ -32,29 +35,32 @@ public class PluginManager {
         return singleInstance;
     }
 
-    public void loadPath(Context context) {
+    public synchronized void loadPath(Context context) {
+        if(!ifLoaded.get()) {
+            ifLoaded.set(true);
+            File filesDir = context.getDir("plugin", Context.MODE_PRIVATE);
+            String name = "plugin.apk";
+            String path = new File(filesDir, name).getAbsolutePath();
 
-        File filesDir = context.getDir("plugin", Context.MODE_PRIVATE);
-        String name = "plugin.apk";
-        String path = new File(filesDir, name).getAbsolutePath();
+            //获取被代理apk的PackageInfo
+            PackageManager packageManager = context.getPackageManager();
+            mActivityPackageInfo = packageManager.getPackageArchiveInfo(path, PackageManager.GET_ACTIVITIES);
+            mReceiverPackageInfo = packageManager.getPackageArchiveInfo(path, PackageManager.GET_RECEIVERS);
 
-        //获取被代理apk的PackageInfo
-        PackageManager packageManager = context.getPackageManager();
-        packageInfo = packageManager.getPackageArchiveInfo(path, PackageManager.GET_ACTIVITIES);
+            //获取被代理apk的ClassLoader
+            File dexOutFile = context.getDir("dex", Context.MODE_PRIVATE);
+            dexClassLoader = new DexClassLoader(path, dexOutFile.getAbsolutePath()
+                    , null, context.getClassLoader());
 
-        //获取被代理apk的ClassLoader
-        File dexOutFile = context.getDir("dex", Context.MODE_PRIVATE);
-        dexClassLoader = new DexClassLoader(path, dexOutFile.getAbsolutePath()
-                , null, context.getClassLoader());
-
-        //获取被代理apk的Resource
-        try {
-            AssetManager assetManager = AssetManager.class.newInstance();
-            Method addAssetPath = AssetManager.class.getMethod("addAssetPath", String.class);
-            addAssetPath.invoke(assetManager, path);
-            resources = new Resources(assetManager, context.getResources().getDisplayMetrics(), context.getResources().getConfiguration());
-        } catch (Exception e) {
-            e.printStackTrace();
+            //获取被代理apk的Resource
+            try {
+                AssetManager assetManager = AssetManager.class.newInstance();
+                Method addAssetPath = AssetManager.class.getMethod("addAssetPath", String.class);
+                addAssetPath.invoke(assetManager, path);
+                resources = new Resources(assetManager, context.getResources().getDisplayMetrics(), context.getResources().getConfiguration());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 //        parseReceivers(context, path);
     }
@@ -67,12 +73,12 @@ public class PluginManager {
         this.resources = resources;
     }
 
-    public PackageInfo getPackageInfo() {
-        return packageInfo;
+    public PackageInfo getActivityPackageInfo() {
+        return mActivityPackageInfo;
     }
 
-    public void setPackageInfo(PackageInfo packageInfo) {
-        this.packageInfo = packageInfo;
+    public void setActivityPackageInfo(PackageInfo packageInfo) {
+        this.mActivityPackageInfo = packageInfo;
     }
 
     public DexClassLoader getDexClassLoader() {
@@ -89,5 +95,13 @@ public class PluginManager {
 
     public void setContext(Context context) {
         this.mContext = context;
+    }
+
+    public PackageInfo getReceiverPackageInfo() {
+        return mReceiverPackageInfo;
+    }
+
+    public void setReceiverPackageInfo(PackageInfo receiverPackageInfo) {
+        this.mReceiverPackageInfo = receiverPackageInfo;
     }
 }
