@@ -8,10 +8,10 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.pluginstandard.LogConfig;
-import com.example.pluginstandard.activity.PluginActivity;
+import com.example.pluginstandard.activity.AbsPluginActivity;
 import com.example.plugintarget.R;
 
-public class MainActivity extends PluginActivity {
+public class MainActivity extends AbsPluginActivity {
     private String TAG = LogConfig.TAG_PREFIX+getClass().getSimpleName();
 
     @Override
@@ -23,7 +23,9 @@ public class MainActivity extends PluginActivity {
         findViewById(R.id.textview).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(that, "Target toast show...", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(that, "Target toast show...", Toast.LENGTH_SHORT).show();
+                Log.d(TAG,"that.getResources() = "+that.getResources());
+                Toast.makeText(that, R.string.test_string, Toast.LENGTH_SHORT).show();
                 Log.d(TAG,"first activity btn clicked");
                 startActivity(new Intent(that, SecondActivity.class));
                 //startService(new Intent(that, TestService.class));

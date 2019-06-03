@@ -4,26 +4,35 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.pluginstandard.LogConfig;
 import com.example.yudongzhou.plugintest.ChaZhuangPlugin.ProxyActivity;
+import com.example.yudongzhou.plugintest.ChaZhuangPlugin.ProxyService;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    private String TAG = getClass().getSimpleName();
-    private TextView jumpToPlugin;
+    private String TAG = LogConfig.TAG_PREFIX+getClass().getSimpleName();
+    private TextView jumpToPlugin,jumpToPluginService;
+    public static Context mContext;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        PluginManager.getInstance().setContext(this);
-        loadPlugin();
+        mContext = this;
+//        PluginManager.getInstance().setContext(this);
+//        loadPlugin();
         jumpToPlugin = findViewById(R.id.jump_to_plugin);
         jumpToPlugin.setOnClickListener(this);
+
+        jumpToPluginService = findViewById(R.id.jump_to_plugin_service);
+        jumpToPluginService.setOnClickListener(this);
     }
 
     private void loadPlugin()
@@ -83,8 +92,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
+        switch (v.getId())
+        {
+            case R.id.jump_to_plugin:
+                jumpToPluginActivity();
+                break;
+            case R.id.jump_to_plugin_service:
+                jumpToPluginService();
+                break;
+            default:
+        }
+    }
+
+    public void jumpToPluginActivity()
+    {
         Intent intent = new Intent(this, ProxyActivity.class);
         intent.putExtra("className", PluginManager.getInstance().getActivityPackageInfo().activities[0].name);
         startActivity(intent);
+    }
+
+    public void jumpToPluginService()
+    {
+        Intent intent = new Intent(this, ProxyService.class);
+        intent.putExtra("className", PluginManager.getInstance().getActivityPackageInfo().activities[0].name);
+        startService(intent);
     }
 }

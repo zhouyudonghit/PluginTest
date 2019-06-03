@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.pluginstandard.activity.IPluginActivity;
 import com.example.pluginstandard.LogConfig;
@@ -26,20 +27,27 @@ public class ProxyActivity extends AppCompatActivity {
         Log.d(TAG,"getWindow() = "+getWindow());
         className = getIntent().getStringExtra("className");
         Log.d(TAG,"onCreate,className = "+className);
-        try{
-            Class activityClass = getClassLoader().loadClass(className);
-            Log.d(TAG,getClassLoader().toString());
-            Constructor activityConstructor = activityClass.getConstructor(new Class[]{});
-            Object activityObject = activityConstructor.newInstance(new Object[]{});
-            mTargetActivity = (IPluginActivity) activityObject;
-
-            mTargetActivity.attach(this);
-            Bundle bundle = new Bundle();
-            mTargetActivity.onCreate(bundle);
+        Log.d(TAG,"getResources() = "+getResources());
+        try {
+            Toast.makeText(this, 0x7f0b002b, Toast.LENGTH_LONG).show();
         }catch (Exception e)
         {
             Log.d(TAG,"",e);
         }
+//        try{
+//            Class activityClass = getClassLoader().loadClass(className);
+//            Log.d(TAG,getClassLoader().toString());
+//            Constructor activityConstructor = activityClass.getConstructor(new Class[]{});
+//            Object activityObject = activityConstructor.newInstance(new Object[]{});
+//            mTargetActivity = (IPluginActivity) activityObject;
+//
+//            mTargetActivity.attach(this);
+//            Bundle bundle = new Bundle();
+//            mTargetActivity.onCreate(bundle);
+//        }catch (Exception e)
+//        {
+//            Log.d(TAG,"",e);
+//        }
     }
 
     @Override
@@ -90,7 +98,9 @@ public class ProxyActivity extends AppCompatActivity {
     protected void onStart() {
         Log.d(TAG,"onStart()");
         super.onStart();
-        mTargetActivity.onStart();
+        if(mTargetActivity != null) {
+            mTargetActivity.onStart();
+        }
     }
 
     @Override
@@ -109,13 +119,17 @@ public class ProxyActivity extends AppCompatActivity {
     protected void onDestroy() {
         Log.d(TAG,"onDestroy");
         super.onDestroy();
-        mTargetActivity.onDestroy();
+        if(mTargetActivity != null) {
+            mTargetActivity.onDestroy();
+        }
     }
 
     @Override
     protected void onPause() {
         Log.d(TAG,"onPause");
         super.onPause();
-        mTargetActivity.onPause();
+        if(mTargetActivity != null) {
+            mTargetActivity.onPause();
+        }
     }
 }
