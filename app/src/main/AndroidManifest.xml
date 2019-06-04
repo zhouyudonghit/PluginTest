@@ -27,14 +27,16 @@
 
         <activity android:name=".ChaZhuangPlugin.ProxyActivity"></activity>
 
-        <receiver android:name=".ChaZhuangPlugin.ProxyBroadcastReceiver"
-            android:enabled="true"
-            android:exported="true">
-            <!--添加以下3行-->
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
-            </intent-filter>
-        </receiver>
+        <!--<receiver android:name=".ChaZhuangPlugin.ProxyBroadcastReceiver"-->
+            <!--android:enabled="true"-->
+            <!--android:exported="true">-->
+            <!--&lt;!&ndash;添加以下3行&ndash;&gt;-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.BOOT_COMPLETED"></action>-->
+            <!--</intent-filter>-->
+        <!--</receiver>-->
+
+        <service android:name=".ChaZhuangPlugin.ProxyService"></service>
     </application>
 
 </manifest>

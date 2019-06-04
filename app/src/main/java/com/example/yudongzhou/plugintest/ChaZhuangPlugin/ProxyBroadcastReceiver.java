@@ -6,17 +6,11 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.util.Log;
-import android.widget.Toast;
-
 import com.example.pluginstandard.LogConfig;
-import com.example.pluginstandard.broadcastreceiver.IBroadcastReceiver;
+import com.example.pluginstandard.broadcastreceiver.IPluginBroadcastReceiver;
 import com.example.yudongzhou.plugintest.MainActivity;
-import com.example.yudongzhou.plugintest.MyApplication;
 import com.example.yudongzhou.plugintest.PluginManager;
-import com.example.yudongzhou.plugintest.R;
-
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 
 public class ProxyBroadcastReceiver extends BroadcastReceiver {
     private String TAG = LogConfig.TAG_PREFIX+getClass().getSimpleName();
@@ -44,7 +38,7 @@ public class ProxyBroadcastReceiver extends BroadcastReceiver {
                     Constructor receiverConstructor = myClass.getConstructor(new Class[]{});
                     Object obj = receiverConstructor.newInstance(new Object[]{});
 //                    Object obj = myClass.newInstance();
-                    IBroadcastReceiver rb = (IBroadcastReceiver) obj;
+                    IPluginBroadcastReceiver rb = (IPluginBroadcastReceiver) obj;
 //                    rb.setResources(PluginManager.getInstance().getResources());
                     rb.onReceive(MainActivity.mContext,intent);
                 } catch (Exception e) {

@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.example.pluginstandard.activity.IPluginActivity;
 import com.example.pluginstandard.LogConfig;
+import com.example.yudongzhou.plugintest.Constants;
 import com.example.yudongzhou.plugintest.PluginManager;
 
 import java.lang.reflect.Constructor;
@@ -25,52 +26,51 @@ public class ProxyActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG,"getWindow() = "+getWindow());
-        className = getIntent().getStringExtra("className");
+        className = getIntent().getStringExtra(Constants.CLASS_NAME);
         Log.d(TAG,"onCreate,className = "+className);
-        Log.d(TAG,"getResources() = "+getResources());
-        try {
-            Toast.makeText(this, 0x7f0b002b, Toast.LENGTH_LONG).show();
+        try{
+            Class activityClass = getClassLoader().loadClass(className);
+            Log.d(TAG,getClassLoader().toString());
+            Constructor activityConstructor = activityClass.getConstructor(new Class[]{});
+            Object activityObject = activityConstructor.newInstance(new Object[]{});
+            mTargetActivity = (IPluginActivity) activityObject;
+
+            mTargetActivity.attach(this);
+            Bundle bundle = new Bundle();
+            mTargetActivity.onCreate(bundle);
         }catch (Exception e)
         {
             Log.d(TAG,"",e);
         }
-//        try{
-//            Class activityClass = getClassLoader().loadClass(className);
-//            Log.d(TAG,getClassLoader().toString());
-//            Constructor activityConstructor = activityClass.getConstructor(new Class[]{});
-//            Object activityObject = activityConstructor.newInstance(new Object[]{});
-//            mTargetActivity = (IPluginActivity) activityObject;
-//
-//            mTargetActivity.attach(this);
-//            Bundle bundle = new Bundle();
-//            mTargetActivity.onCreate(bundle);
-//        }catch (Exception e)
-//        {
-//            Log.d(TAG,"",e);
-//        }
     }
 
     @Override
     public void startActivity(Intent intent) {
         String className1 = intent.getStringExtra("className");
         Intent intent1 = new Intent(this, ProxyActivity.class);
-        intent1.putExtra("className", className1);
+        intent1.putExtra(Constants.CLASS_NAME, className1);
         super.startActivity(intent1);
     }
 
     @Override
     public ComponentName startService(Intent service) {
-        String serviceName = service.getStringExtra("serviceName");
+        String serviceName = service.getStringExtra(Constants.CLASS_NAME);
         Intent intent1 = new Intent(this, ProxyService.class);
-        intent1.putExtra("serviceName", serviceName);
+        intent1.putExtra(Constants.CLASS_NAME, serviceName);
         return super.startService(intent1);
     }
 
     @Override
+    public boolean stopService(Intent name) {
+        Intent intent = new Intent(this,ProxyService.class);
+        return super.stopService(intent);
+    }
+
+    @Override
     public boolean bindService(Intent service, ServiceConnection conn, int flags) {
-        String serviceName = service.getStringExtra("serviceName");
+        String serviceName = service.getStringExtra(Constants.CLASS_NAME);
         Intent intent1 = new Intent(this, ProxyService.class);
-        intent1.putExtra("serviceName", serviceName);
+        intent1.putExtra(Constants.CLASS_NAME, serviceName);
         return super.bindService(intent1, conn, flags);
     }
 

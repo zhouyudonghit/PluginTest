@@ -5,22 +5,25 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pluginstandard.LogConfig;
 import com.example.pluginstandard.activity.AbsPluginActivity;
 import com.example.plugintarget.R;
+import com.example.plugintarget.service.TargetService;
 
-public class MainActivity extends AbsPluginActivity {
+public class FirstActivity extends AbsPluginActivity {
     private String TAG = LogConfig.TAG_PREFIX+getClass().getSimpleName();
-
+    private TextView jumpToSencondTV,startServiceTV,stopServiceTV;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.d(TAG,"onCreate");
         Log.d(TAG,"getWindow() = "+getWindow());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        findViewById(R.id.textview).setOnClickListener(new View.OnClickListener() {
+        jumpToSencondTV = findViewById(R.id.textview);
+        jumpToSencondTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                Toast.makeText(that, "Target toast show...", Toast.LENGTH_SHORT).show();
@@ -29,6 +32,23 @@ public class MainActivity extends AbsPluginActivity {
                 Log.d(TAG,"first activity btn clicked");
                 startActivity(new Intent(that, SecondActivity.class));
                 //startService(new Intent(that, TestService.class));
+            }
+        });
+
+        startServiceTV = findViewById(R.id.start_service);
+        startServiceTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(that,TargetService.class);
+                startService(intent);
+            }
+        });
+
+        stopServiceTV = findViewById(R.id.stop_service);
+        stopServiceTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                stopService(new Intent());
             }
         });
     }

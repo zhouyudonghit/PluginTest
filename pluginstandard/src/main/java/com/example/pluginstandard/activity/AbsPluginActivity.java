@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.example.pluginstandard.Constants;
 import com.example.pluginstandard.LogConfig;
 
 public abstract class AbsPluginActivity extends AppCompatActivity implements IPluginActivity {
@@ -51,10 +52,21 @@ public abstract class AbsPluginActivity extends AppCompatActivity implements IPl
         if(that != null)
         {
             Intent m = new Intent();
-            m.putExtra("serviceName",service.getComponent().getClassName());
+            m.putExtra(Constants.CLASS_NAME,service.getComponent().getClassName());
             return that.startService(m);
         }
         return super.startService(service);
+    }
+
+    @Override
+    public boolean stopService(Intent name) {
+        if(that != null)
+        {
+            Log.d(TAG,"that.stopService");
+            return that.stopService(name);
+        }
+        Log.d(TAG,"super.stopService");
+        return super.stopService(name);
     }
 
     @Override

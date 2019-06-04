@@ -1,7 +1,11 @@
 package com.example.yudongzhou.plugintest;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.Binder;
+import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,7 +23,8 @@ import java.io.InputStream;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private String TAG = LogConfig.TAG_PREFIX+getClass().getSimpleName();
-    private TextView jumpToPlugin,jumpToPluginService;
+    private TextView jumpToPlugin,jumpToPluginService,stopPluginService;
+    private TextView bindPluginService,unbindPluginService;
     public static Context mContext;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +38,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         jumpToPluginService = findViewById(R.id.jump_to_plugin_service);
         jumpToPluginService.setOnClickListener(this);
+
+        stopPluginService = findViewById(R.id.stop_plugin_service);
+        stopPluginService.setOnClickListener(this);
+
+        bindPluginService = findViewById(R.id.bind_plugin_service);
+        bindPluginService.setOnClickListener(this);
+
+        unbindPluginService = findViewById(R.id.unbind_plugin_service);
+        unbindPluginService.setOnClickListener(this);
     }
 
     private void loadPlugin()
@@ -100,6 +114,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.jump_to_plugin_service:
                 jumpToPluginService();
                 break;
+            case R.id.stop_plugin_service:
+                stopPluginService();
+                break;
+            case R.id.bind_plugin_service:
+                bindPluginService();
+                break;
+            case R.id.unbind_plugin_service:
+                unbindPluginService();
+                break;
             default:
         }
     }
@@ -107,14 +130,48 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void jumpToPluginActivity()
     {
         Intent intent = new Intent(this, ProxyActivity.class);
-        intent.putExtra("className", PluginManager.getInstance().getActivityPackageInfo().activities[0].name);
+        intent.putExtra(Constants.CLASS_NAME, PluginManager.getInstance().getActivityPackageInfo().activities[0].name);
         startActivity(intent);
     }
 
     public void jumpToPluginService()
     {
+        Log.d(TAG,"jumpToPluginService()");
         Intent intent = new Intent(this, ProxyService.class);
-        intent.putExtra("className", PluginManager.getInstance().getActivityPackageInfo().activities[0].name);
+        intent.putExtra(Constants.CLASS_NAME, PluginManager.getInstance().getServicePackageInfo().services[0].name);
         startService(intent);
+    }
+
+    public void stopPluginService()
+    {
+        Log.d(TAG,"stopPluginService()");
+        Intent intent = new Intent(this,ProxyService.class);
+        stopService(intent);
+    }
+
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            Log.d(TAG,"onServiceConnected,"+service);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            Log.d(TAG,"onServiceDisconnected");
+        }
+    };
+
+    public void bindPluginService()
+    {
+        Log.d(TAG,"bindPluginService()");
+        Intent intent = new Intent(this,ProxyService.class);
+        intent.putExtra(Constants.CLASS_NAME,PluginManager.getInstance().getServicePackageInfo().services[0].name);
+        bindService(intent,serviceConnection,BIND_AUTO_CREATE);
+    }
+
+    public void unbindPluginService()
+    {
+        Log.d(TAG,"unbindPluginService()");
+        unbindService(serviceConnection);
     }
 }
