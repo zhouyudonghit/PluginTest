@@ -20,6 +20,7 @@ import com.example.yudongzhou.plugintest.ChaZhuangPlugin.ProxyService;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.lang.reflect.Method;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private String TAG = LogConfig.TAG_PREFIX+getClass().getSimpleName();
@@ -153,6 +154,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             Log.d(TAG,"onServiceConnected,"+service);
+            Class binderClass = service.getClass();
+            try {
+                Method method = binderClass.getDeclaredMethod("getService",null);
+                if(method != null)
+                {
+
+                }
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            }
         }
 
         @Override
