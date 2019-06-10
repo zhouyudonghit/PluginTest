@@ -65,11 +65,11 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="unbind plugin service"
+        android:text="jump to hook main activity"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:id="@+id/start_activity_service"
+        android:id="@+id/jump_to_hook_main_activity"
         style="@style/MyTextViewStyle"/>
 </LinearLayout>

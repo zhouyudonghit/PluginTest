@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.example.pluginstandard.LogConfig;
 import com.example.yudongzhou.plugintest.ChaZhuangPlugin.ProxyActivity;
 import com.example.yudongzhou.plugintest.ChaZhuangPlugin.ProxyService;
+import com.example.yudongzhou.plugintest.HookPlugin.HookMainActivity;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String TAG = LogConfig.TAG_PREFIX+getClass().getSimpleName();
     private TextView jumpToPlugin,jumpToPluginService,stopPluginService;
     private TextView bindPluginService,unbindPluginService;
+    private TextView jumpToHookMainActivity;
     public static Context mContext;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         unbindPluginService = findViewById(R.id.unbind_plugin_service);
         unbindPluginService.setOnClickListener(this);
+
+        jumpToHookMainActivity = findViewById(R.id.jump_to_hook_main_activity);
+        jumpToHookMainActivity.setOnClickListener(this);
     }
 
     private void loadPlugin()
@@ -124,6 +129,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.unbind_plugin_service:
                 unbindPluginService();
                 break;
+            case R.id.jump_to_hook_main_activity:
+                jumpToHookMainActivity();
+                break;
             default:
         }
     }
@@ -184,5 +192,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     {
         Log.d(TAG,"unbindPluginService()");
         unbindService(serviceConnection);
+    }
+
+    public void jumpToHookMainActivity()
+    {
+        Intent intent = new Intent();
+        intent.setComponent(new ComponentName(getPackageName(),HookMainActivity.class.getSimpleName()));
+        startActivity(intent);
     }
 }

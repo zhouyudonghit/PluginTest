@@ -71,7 +71,7 @@ public class HookUtil {
             //我要在这里搞点事情
             if ("startActivity".contains(method.getName())) {
                 Log.e(TAG,"Activity已经开始启动");
-                Log.e(TAG,"小弟到此一游！！！");
+                Log.e(TAG,"小弟到此checkPermission一游！！！");
             }
             return method.invoke(iActivityManagerObject, args);
         }
