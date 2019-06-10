@@ -3,6 +3,9 @@ package com.example.yudongzhou.plugintest;
 import android.app.Application;
 import android.content.Context;
 
+import com.example.yudongzhou.plugintest.HookPlugin.HookMainActivity;
+import com.example.yudongzhou.plugintest.HookPlugin.HookUtil;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -14,7 +17,8 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         mApplication = this;
-        initPlugin();
+//        initPlugin();
+        initHookPlugin();
     }
 
     public static Application getApplication()
@@ -26,6 +30,12 @@ public class MyApplication extends Application {
     {
         PluginManager.getInstance().setContext(this);
         loadPlugin();
+    }
+
+    public void initHookPlugin()
+    {
+        HookUtil hookUtil = new HookUtil(HookMainActivity.class,this);
+        hookUtil.hookAms();
     }
 
     private void loadPlugin()

@@ -61,4 +61,15 @@
         app:layout_constraintTop_toTopOf="parent"
         android:id="@+id/unbind_plugin_service"
         style="@style/MyTextViewStyle"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="unbind plugin service"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/start_activity_service"
+        style="@style/MyTextViewStyle"/>
 </LinearLayout>
