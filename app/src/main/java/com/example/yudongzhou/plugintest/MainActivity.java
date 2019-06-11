@@ -197,7 +197,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void jumpToHookMainActivity()
     {
         Intent intent = new Intent();
-        intent.setComponent(new ComponentName(getPackageName(),HookMainActivity.class.getSimpleName()));
+        intent.setComponent(new ComponentName(getPackageName(),HookMainActivity.class.getName()));
         startActivity(intent);
     }
 }

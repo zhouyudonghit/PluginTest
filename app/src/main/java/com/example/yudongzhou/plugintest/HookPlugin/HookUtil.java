@@ -28,16 +28,19 @@ public class HookUtil {
         try {
             Class<?> ActivityManagerNativeClss = Class.forName("android.app.ActivityManagerNative");
 
+//            Method getDefault = ActivityManagerNativeClss.getDeclaredMethod("getDefault");
+//            Object iActivityManagerObject = getDefault.invoke(null);
+
             Field defaultFiled = ActivityManagerNativeClss.getDeclaredField("gDefault");
             defaultFiled.setAccessible(true);
             Object defaultValue = defaultFiled.get(null);
             //反射SingleTon
-            Class<?> SingletonClass = Class.forName("android.util.Singleton");
-            Field mInstance = SingletonClass.getDeclaredField("mInstance");
+//            Class<?> SingletonClass = Class.forName("android.util.Singleton");
+//            defaultFiled.getClass()
+            Field mInstance = defaultFiled.getType().getDeclaredField("mInstance");
             mInstance.setAccessible(true);
             //到这里已经拿到ActivityManager对象
             Object iActivityManagerObject = mInstance.get(defaultValue);
-
 
 
             //开始动态代理，用代理对象替换掉真实的ActivityManager，瞒天过海
