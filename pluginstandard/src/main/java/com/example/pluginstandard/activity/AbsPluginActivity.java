@@ -19,6 +19,8 @@ import android.view.WindowManager;
 import com.example.pluginstandard.Constants;
 import com.example.pluginstandard.LogConfig;
 
+import java.lang.reflect.Proxy;
+
 public abstract class AbsPluginActivity extends AppCompatActivity implements IPluginActivity {
     private String TAG = LogConfig.TAG_PREFIX+"PluginActivity";
     protected Activity that;

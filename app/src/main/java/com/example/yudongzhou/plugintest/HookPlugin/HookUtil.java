@@ -1,6 +1,8 @@
 package com.example.yudongzhou.plugintest.HookPlugin;
 
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 import com.example.pluginstandard.LogConfig;
@@ -75,8 +77,37 @@ public class HookUtil {
             if ("startActivity".contains(method.getName())) {
                 Log.e(TAG,"Activity已经开始启动");
                 Log.e(TAG,"小弟到此checkPermission一游！！！");
+                replaceIntent(args);
             }
             return method.invoke(iActivityManagerObject, args);
+        }
+    }
+
+    public void replaceIntent(Object[] args)
+    {
+        int intentIndex = 0;
+        Intent oldIntent = null;
+        if(args != null && args.length > 0)
+        {
+            for(int i = 0;i < args.length;i++)
+            {
+                if(args[i] instanceof Intent)
+                {
+                    intentIndex = i;
+                    oldIntent = (Intent) args[i];
+                    break;
+                }
+            }
+
+            if(oldIntent != null && oldIntent.getComponent() != null)
+            {
+                ComponentName componentName = oldIntent.getComponent();
+                if(TestHookTargetActivity.class.getName().equals(componentName.getClassName()))
+                {
+                    Intent newIntent = new Intent(context,TestHookTargetActivity.class);
+                    args[intentIndex] = newIntent;
+                }
+            }
         }
     }
 }

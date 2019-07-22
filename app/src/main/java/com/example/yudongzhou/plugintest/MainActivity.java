@@ -17,6 +17,7 @@ import com.example.pluginstandard.LogConfig;
 import com.example.yudongzhou.plugintest.ChaZhuangPlugin.ProxyActivity;
 import com.example.yudongzhou.plugintest.ChaZhuangPlugin.ProxyService;
 import com.example.yudongzhou.plugintest.HookPlugin.HookMainActivity;
+import com.example.yudongzhou.plugintest.HookPlugin.TestHookTargetActivity;
 
 import java.io.File;
 import java.io.FileOutputStream;
