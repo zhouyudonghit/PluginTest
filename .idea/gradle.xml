@@ -9,6 +9,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/pluginhooktarget" />
             <option value="$PROJECT_DIR$/pluginstandard" />
             <option value="$PROJECT_DIR$/plugintarget" />
           </set>

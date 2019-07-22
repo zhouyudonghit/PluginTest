@@ -17,6 +17,7 @@ import com.example.pluginstandard.LogConfig;
 import com.example.yudongzhou.plugintest.ChaZhuangPlugin.ProxyActivity;
 import com.example.yudongzhou.plugintest.ChaZhuangPlugin.ProxyService;
 import com.example.yudongzhou.plugintest.HookPlugin.HookMainActivity;
+import com.example.yudongzhou.plugintest.HookPlugin.TestHookTargetActivity;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -197,7 +198,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void jumpToHookMainActivity()
     {
         Intent intent = new Intent();
-        intent.setComponent(new ComponentName(getPackageName(),HookMainActivity.class.getName()));
+        intent.setComponent(new ComponentName(getPackageName(),TestHookTargetActivity.class.getName()));
         startActivity(intent);
     }
 }
